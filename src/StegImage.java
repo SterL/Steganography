@@ -2,7 +2,7 @@
  * Written by Sterling Zerr 9/20/16
  *
  * This class handles reading and writing of image files. You can pass the path
- * of an images directory, imagefilename, outputfilename to the constructor.
+ * of an image and the path of the output image to the constructor.
  * This will allow you to retrieve the byte array of the image file. You can
  * then alter the images RGB values from the byte array, and then save the newly
  * altered pixels into a new image.
@@ -21,34 +21,34 @@ class StegImage {
     private BufferedImage outputImage;
     private File inputFile;
     private File outputFile;
-    private String path;
-    private String inputFileName;
-    private String outputFileName;
+    private String inputFilePath;
+    private String outputFilePath;
     private String fileType;
     private int height;
     private int width;
+    private int[] pixels;
 
     /**
-     * Constructor that takes a path to an images dir, inputFileName, and
-     * outputFileName. This saves the encoded image to a new, near-duplicate
+     * Constructor that takes a path to an input image, and a path to an
+     * output image. This saves the concealed image to a new, near-duplicate
      * image instead of overwriting the original.
      *
      * @param path
      * @param inputFileName
      * @param outputFileName
      */
-    public StegImage(String path, String outputFileName) {
+    public StegImage(String inputFilePath, String outputFilePath) {
         try {
-            this.path = path;
-            this.inputFileName = extractFileName(path);
-            this.outputFileName = outputFileName;
-            this.fileType = path.substring(path.length() - 4, path.length());
-            this.inputFile = new File(path);
-            this.outputFile = new File(separateOutputPath(path, outputFileName));
+            this.inputFilePath = extractFileName(inputFilePath);
+            this.outputFilePath = extractFileName(outputFilePath);
+            this.fileType = inputFilePath.substring(inputFilePath.length() - 4, inputFilePath.length());
+            this.inputFile = new File(inputFilePath);
+            this.outputFile = new File(outputFilePath);
             this.inputImage = ImageIO.read(inputFile);
             this.height = inputImage.getHeight();
             this.width = inputImage.getWidth();
             this.outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // FOR BMP FILES
+            this.pixels = getByteArray();
 
         } catch (IOException e) {
             System.out.println("Error: " + e);
@@ -56,23 +56,21 @@ class StegImage {
     }
 
     /**
-     * Constructor that just takes a path to an image file. From here the user
-     * can get the byte array from an image and the user can also potentially
-     * overwrite the current image.
+     * Constructor that takes a path to an input image.
+     * This saves the encoded image to a new, near-duplicate
+     * image instead of overwriting the original.
      *
-     * @param path
+     * @param inputFileName
      */
-    public StegImage(String path) {
+    public StegImage(String inputFilePath) {
         try {
-            this.path = path;
-            this.fileType = path.substring(path.length() - 4, path.length());
-            this.inputFile = new File(path);
-            this.outputFile = new File(path);
+            this.inputFilePath = extractFileName(inputFilePath);
+            this.fileType = inputFilePath.substring(inputFilePath.length() - 4, inputFilePath.length());
+            this.inputFile = new File(inputFilePath);
             this.inputImage = ImageIO.read(inputFile);
             this.height = inputImage.getHeight();
             this.width = inputImage.getWidth();
-            this.outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // FOR BMP FILES
-
+//            this.outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // FOR BMP FILES
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
@@ -96,11 +94,12 @@ class StegImage {
      * @param newPixels
      * @return
      */
-    public boolean saveImage(int[] newPixels) {
+//    public boolean saveImage(int[] newPixels) {
+    public boolean saveImage() {
         try {
-            outputImage.setRGB(0, 0, width, height, newPixels, 0, width);
+            outputImage.setRGB(0, 0, width, height, this.pixels, 0, width);
             if (ImageIO.write(outputImage, "bmp", outputFile) == true) {
-                System.out.println("The Steganogrified image has been saved successfully to: " + separateOutputPath(path, outputFileName));
+                System.out.println("The Steganogrified image has been saved successfully to: " + this.outputFile.getAbsolutePath());//outputFilePath);
                 return true;
             } else {
                 System.out.println("Error: The file was not saved successfully");
@@ -110,6 +109,10 @@ class StegImage {
             Logger.getLogger(StegImage.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public void setPixels(int[] pixels) {
+        this.pixels = pixels;
     }
 
     /**
@@ -123,24 +126,4 @@ class StegImage {
         return strings[strings.length - 1];
     }
 
-    /**
-     * This method replaces the inputFileName with the outputFileName in the
-     * path and returns the path of the output file.
-     *
-     * @param path
-     * @param outputFileName
-     * @return
-     */
-    private String separateOutputPath(String path, String outputFileName) {
-        String s = "";
-        String[] strings = path.split("\\\\");
-        for (int i = 0; i < strings.length - 1; i++) {
-            if (i == 0) {
-                s = strings[i];
-            } else {
-                s = s + "\\" + strings[i];
-            }
-        }
-        return s + "\\" + outputFileName;
-    }
 }
