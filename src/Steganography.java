@@ -1,17 +1,17 @@
 /**
  * Written by Sterling Zerr 9/20/16
- * This is the main class which takes 5 arguments:
+ * This is the main class which takes 3 or 5 arguments depending on the operation:
  * 1.) Operation to perform:
  * a.) conceal - steganografies a message into the image
  * b.) reveal  - reveals the steganografied message in image
  * 2.) Flags of which color bytes to conceal the message into (-rgb)
- * a.) 'rgb'
- * b.) 'rg'
- * c.) 'rb'
- * d.) 'bg'
- * e.) 'r'
- * f.) 'b'
- * g.) 'g'
+ * a.) '-rgb'
+ * b.) '-rg'
+ * c.) '-rb'
+ * d.) '-bg'
+ * e.) '-r'
+ * f.) '-b'
+ * g.) '-g'
  * 3.) Path of the input image to conceal the message into
  * 4.) Path of the output image which holds the concealed message
  * 5.) Message to conceal into the image
@@ -79,7 +79,6 @@ public class Steganography {
                 System.out.println("Error: invalid number of arguments");
                 System.exit(0);
             }
-
 
         } else if (operation.equals("reveal")) {
             StegImage si = new StegImage(inputFilePath);
