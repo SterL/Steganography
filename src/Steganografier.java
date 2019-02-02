@@ -12,13 +12,13 @@ import java.awt.Color;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-class Steganogrifier {
+class Steganografier {
 
     // This int/byte array stores the pixel data we need to conceal a message into
     private int[] inputImageByteArray;
     private StegImage stegImage;
 
-    public Steganogrifier(StegImage stegImage) {
+    public Steganografier(StegImage stegImage) {
         this.stegImage = stegImage;
         this.inputImageByteArray = stegImage.getByteArray();
     }

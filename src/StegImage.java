@@ -99,7 +99,7 @@ class StegImage {
         try {
             outputImage.setRGB(0, 0, width, height, this.pixels, 0, width);
             if (ImageIO.write(outputImage, "bmp", outputFile) == true) {
-                System.out.println("The Steganogrified image has been saved successfully to: " + this.outputFile.getAbsolutePath());//outputFilePath);
+                System.out.println("The Steganografied image has been saved successfully to: " + this.outputFile.getAbsolutePath());//outputFilePath);
                 return true;
             } else {
                 System.out.println("Error: The file was not saved successfully");

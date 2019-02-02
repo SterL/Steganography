@@ -2,8 +2,8 @@
  * Written by Sterling Zerr 9/20/16
  * This is the main class which takes 5 arguments:
  * 1.) Operation to perform:
- * a.) conceal - steganogrifies a message into the image
- * b.) reveal  - reveals the steganogrified message in image
+ * a.) conceal - steganografies a message into the image
+ * b.) reveal  - reveals the steganografied message in image
  * 2.) Flags of which color bytes to conceal the message into (-rgb)
  * a.) 'rgb'
  * b.) 'rg'
@@ -64,9 +64,9 @@ public class Steganography {
                 String message = args[4];
 
                 StegImage si = new StegImage(inputFilePath, outputFilePath);
-                Steganogrifier steganogrifier = new Steganogrifier(si);
-                steganogrifier.selectableSteganographi(message, flags);
-                String decodedMessage = steganogrifier.selectableDesteganographi(flags);
+                Steganografier Steganografier = new Steganografier(si);
+                Steganografier.selectableSteganographi(message, flags);
+                String decodedMessage = Steganografier.selectableDesteganographi(flags);
 
                 if (message.equals(decodedMessage)) {
                     si.saveImage();
@@ -83,8 +83,8 @@ public class Steganography {
 
         } else if (operation.equals("reveal")) {
             StegImage si = new StegImage(inputFilePath);
-            Steganogrifier steganogrifier = new Steganogrifier(si);
-            String decodedMessage = steganogrifier.selectableDesteganographi(flags);
+            Steganografier Steganografier = new Steganografier(si);
+            String decodedMessage = Steganografier.selectableDesteganographi(flags);
             System.out.println(decodedMessage);
         }
     }
