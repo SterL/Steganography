@@ -214,6 +214,7 @@ class Steganografier {
   public String desteganographi(int[] pixels) {
     ArrayList messageBytes = new ArrayList();
     String decodedString = "";
+
     for (int i = 0; i < pixels.length; i++) {
       Color c = new Color(pixels[i]);
       String r = Integer.toBinaryString(c.getRed());
@@ -224,8 +225,12 @@ class Steganografier {
       messageBytes.add(b.substring(b.length() - 1, b.length()));
 
       //Break the loop if the message has been fully read.
-      if (i > 8) {
-        if (messageBytes.get(i - 7).equals("0")
+      // Probably need a better way to break this.
+      // May be possible that a specific sequence of 2 characters results in
+      // multiple 0's
+      if (i > 9) {
+        if (messageBytes.get(i - 8).equals("0")
+          && messageBytes.get(i - 7).equals("0")
           && messageBytes.get(i - 6).equals("0")
           && messageBytes.get(i - 5).equals("0")
           && messageBytes.get(i - 4).equals("0")
@@ -234,7 +239,6 @@ class Steganografier {
           && messageBytes.get(i - 1).equals("0")
           && messageBytes.get(i).equals("0")) {
           break;
-
         }
       }
     }
@@ -251,6 +255,7 @@ class Steganografier {
       int asciiCode = Integer.parseInt(ss, 2);
       decodedString = decodedString + Character.toString((char) asciiCode);
     }
+
     return decodedString;
   }
 
